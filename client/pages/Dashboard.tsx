@@ -95,14 +95,26 @@ const statusColors = {
 };
 
 export default function Dashboard() {
-  const [documentType, setDocumentType] = useState<string | null>(null);
-  const [status, setStatus] = useState<string | null>(null);
-  const [warehouse, setWarehouse] = useState<string | null>(null);
+  const [documentType, setDocumentType] = useState<string>("all");
+  const [status, setStatus] = useState<string>("all");
+  const [warehouse, setWarehouse] = useState<string>("all");
+
+  const handleDocumentTypeChange = (value: string) => {
+    setDocumentType(value === "all" ? "all" : value);
+  };
+
+  const handleStatusChange = (value: string) => {
+    setStatus(value === "all" ? "all" : value);
+  };
+
+  const handleWarehouseChange = (value: string) => {
+    setWarehouse(value === "all" ? "all" : value);
+  };
 
   const filterOperations = () => {
     return mockOperations.filter((op) => {
-      if (documentType && op.type !== documentType) return false;
-      if (status && op.status !== status) return false;
+      if (documentType !== "all" && op.type !== documentType) return false;
+      if (status !== "all" && op.status !== status) return false;
       return true;
     });
   };
@@ -201,12 +213,12 @@ export default function Dashboard() {
                 <label className="text-sm font-medium text-gray-700 block mb-2">
                   Document Type
                 </label>
-                <Select value={documentType || ""} onValueChange={setDocumentType}>
+                <Select value={documentType} onValueChange={handleDocumentTypeChange}>
                   <SelectTrigger>
                     <SelectValue placeholder="All types" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All types</SelectItem>
+                    <SelectItem value="all">All types</SelectItem>
                     <SelectItem value="Receipt">Receipts</SelectItem>
                     <SelectItem value="Delivery">Delivery</SelectItem>
                     <SelectItem value="Internal Transfer">Internal Transfer</SelectItem>
@@ -219,12 +231,12 @@ export default function Dashboard() {
                 <label className="text-sm font-medium text-gray-700 block mb-2">
                   Status
                 </label>
-                <Select value={status || ""} onValueChange={setStatus}>
+                <Select value={status} onValueChange={handleStatusChange}>
                   <SelectTrigger>
                     <SelectValue placeholder="All statuses" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All statuses</SelectItem>
+                    <SelectItem value="all">All statuses</SelectItem>
                     <SelectItem value="Draft">Draft</SelectItem>
                     <SelectItem value="Pending">Pending</SelectItem>
                     <SelectItem value="In Progress">In Progress</SelectItem>
@@ -238,12 +250,12 @@ export default function Dashboard() {
                 <label className="text-sm font-medium text-gray-700 block mb-2">
                   Warehouse
                 </label>
-                <Select value={warehouse || ""} onValueChange={setWarehouse}>
+                <Select value={warehouse} onValueChange={handleWarehouseChange}>
                   <SelectTrigger>
                     <SelectValue placeholder="All warehouses" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All warehouses</SelectItem>
+                    <SelectItem value="all">All warehouses</SelectItem>
                     <SelectItem value="main">Main Warehouse</SelectItem>
                     <SelectItem value="zone-a">Zone A</SelectItem>
                     <SelectItem value="zone-b">Zone B</SelectItem>
@@ -256,9 +268,9 @@ export default function Dashboard() {
                 <Button
                   variant="outline"
                   onClick={() => {
-                    setDocumentType(null);
-                    setStatus(null);
-                    setWarehouse(null);
+                    setDocumentType("all");
+                    setStatus("all");
+                    setWarehouse("all");
                   }}
                   className="w-full"
                 >
